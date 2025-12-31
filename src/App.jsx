@@ -9,6 +9,7 @@ function App() {
       <Confetti />
       <Routes>
         <Route path="/" element={<ImageStylerPage />} />
+        <Route path="/styler" element={<ImageStylerPage />} />
       </Routes>
     </div>
   )
