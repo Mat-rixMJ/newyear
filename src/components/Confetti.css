@@ -1,0 +1,120 @@
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.confetti-particle {
+    position: absolute;
+    top: -20px;
+    animation: confettiFall linear infinite;
+    opacity: 0.8;
+}
+
+.confetti-circle {
+    border-radius: 50%;
+}
+
+.confetti-rect {
+    border-radius: 2px;
+    transform-origin: center;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(50vh) rotate(360deg) translateX(30px) scale(0.9);
+        opacity: 0.8;
+    }
+
+    75% {
+        transform: translateY(75vh) rotate(540deg) translateX(-20px) scale(0.7);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(720deg) translateX(10px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Sparkle stars */
+.sparkle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--color-gold);
+    border-radius: 50%;
+    animation: sparkle 2s ease-in-out infinite;
+    box-shadow: 0 0 10px var(--color-gold), 0 0 20px var(--color-gold);
+}
+
+.sparkle::before,
+.sparkle::after {
+    content: '';
+    position: absolute;
+    background: var(--color-gold);
+}
+
+.sparkle::before {
+    width: 2px;
+    height: 16px;
+    top: -5px;
+    left: 2px;
+    border-radius: 2px;
+}
+
+.sparkle::after {
+    width: 16px;
+    height: 2px;
+    top: 2px;
+    left: -5px;
+    border-radius: 2px;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+    }
+
+    25% {
+        opacity: 1;
+        transform: scale(1) rotate(90deg);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8) rotate(180deg);
+    }
+
+    75% {
+        opacity: 1;
+        transform: scale(1) rotate(270deg);
+    }
+}
+
+/* Reduce animation on prefer-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .confetti-particle,
+    .sparkle {
+        animation: none;
+        opacity: 0.3;
+    }
+}

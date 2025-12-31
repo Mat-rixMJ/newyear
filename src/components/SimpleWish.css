@@ -1,0 +1,323 @@
+.simple-wish {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.wish-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.wish-header h1 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.wish-header p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Form Styles */
+.input-form {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.name-field {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.name-field:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.name-field::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Upload Area */
+.upload-area {
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.upload-area:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+}
+
+/* Image Grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.image-thumb {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.image-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-thumb .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 0, 0, 0.8);
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.generate-btn {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* ============ RESULT VIEW ============ */
+.result-view {
+    max-width: 700px;
+}
+
+.result-container {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Slideshow */
+.slideshow {
+    position: relative;
+    height: 300px;
+    background: #000;
+    overflow: hidden;
+}
+
+.slides {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    overflow: hidden;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: kenBurns 6s ease-in-out infinite;
+}
+
+/* Ken Burns Effect - Zoom & Pan */
+@keyframes kenBurns {
+    0% {
+        transform: scale(1) translateX(0);
+    }
+
+    50% {
+        transform: scale(1.15) translateX(-2%);
+    }
+
+    100% {
+        transform: scale(1) translateX(0);
+    }
+}
+
+/* Different animations for variety */
+.slide:nth-child(odd) img {
+    animation: kenBurnsAlt 6s ease-in-out infinite;
+}
+
+@keyframes kenBurnsAlt {
+    0% {
+        transform: scale(1.1) translateY(0);
+    }
+
+    50% {
+        transform: scale(1) translateY(-2%);
+    }
+
+    100% {
+        transform: scale(1.1) translateY(0);
+    }
+}
+
+/* Slide entrance animation */
+.slide.active img {
+    animation: slideIn 0.8s ease-out, kenBurns 6s ease-in-out 0.8s infinite;
+}
+
+.slide:nth-child(odd).active img {
+    animation: slideIn 0.8s ease-out, kenBurnsAlt 6s ease-in-out 0.8s infinite;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: scale(1.3);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.slide-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* Wish Content */
+.wish-content {
+    padding: 2rem;
+    text-align: center;
+}
+
+.year-badge {
+    display: inline-block;
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ffd700, #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.wish-title {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.name-highlight {
+    color: #667eea;
+}
+
+.wish-message {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.result-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 0 2rem 2rem;
+    flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .simple-wish {
+        padding: 1rem;
+    }
+
+    .input-form {
+        padding: 1.5rem;
+    }
+
+    .slideshow {
+        height: 250px;
+    }
+
+    .wish-content {
+        padding: 1.5rem;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .result-actions button {
+        width: 100%;
+    }
+}
