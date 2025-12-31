@@ -64,7 +64,9 @@ function SimpleWish() {
     }, [])
 
     const handleShare = useCallback(() => {
-        const text = `🎉 Happy New Year 2026, ${name}! 🎆\n\n${wish}\n\n✨ Create your own wish at: ${window.location.origin}/styler`
+        // Create shareable URL with name and wish
+        const shareUrl = `${window.location.origin}/wish?name=${encodeURIComponent(name)}&msg=${encodeURIComponent(wish)}`
+        const text = `🎉 Happy New Year 2026! Here's a special wish for you:\n\n${shareUrl}`
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`
         window.open(whatsappUrl, '_blank')
     }, [name, wish])
