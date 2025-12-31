@@ -8,7 +8,8 @@ function Confetti() {
         const colors = ['#FFD700', '#7B2CBF', '#3B5CB8', '#FF6B9D', '#00D9FF', '#FF8C42']
         const newParticles = []
 
-        for (let i = 0; i < 50; i++) {
+        // Reduced from 50 to 20 for better performance
+        for (let i = 0; i < 20; i++) {
             newParticles.push({
                 id: i,
                 left: Math.random() * 100,
@@ -40,8 +41,8 @@ function Confetti() {
                 />
             ))}
 
-            {/* Sparkle stars */}
-            {Array.from({ length: 20 }).map((_, i) => (
+            {/* Reduced sparkles for performance */}
+            {Array.from({ length: 8 }).map((_, i) => (
                 <div
                     key={`sparkle-${i}`}
                     className="sparkle"
