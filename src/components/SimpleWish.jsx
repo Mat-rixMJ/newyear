@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { fileToBase64, generatePersonalizedWish } from '../services/geminiService'
+import { uploadImages, saveWish } from '../services/supabaseService'
 import Button from './Button'
 import './SimpleWish.css'
 
@@ -11,6 +12,9 @@ function SimpleWish() {
     const [isGenerating, setIsGenerating] = useState(false)
     const [showResult, setShowResult] = useState(false)
     const fileInputRef = useRef(null)
+
+    const [wishId, setWishId] = useState(null)
+    const [isSaving, setIsSaving] = useState(false)
 
     // Auto-slide effect
     useEffect(() => {
@@ -41,17 +45,30 @@ function SimpleWish() {
 
         setIsGenerating(true)
         try {
-            // Get base64 of first image for AI context
+            // 1. Generate Wish Text
             const base64 = await fileToBase64(images[0].file)
             const generatedWish = await generatePersonalizedWish(name.trim(), base64, images[0].file.type)
             setWish(generatedWish)
             setShowResult(true)
+
+            // 2. Upload Images & Save Data (background process)
+            setIsSaving(true)
+            const files = images.map(img => img.file)
+            const imageUrls = await uploadImages(files)
+
+            if (imageUrls.length > 0) {
+                const newWishId = await saveWish(name.trim(), generatedWish, imageUrls)
+                setWishId(newWishId)
+            }
         } catch (err) {
             console.error(err)
-            setWish(`Dear ${name}, may 2026 bring you endless joy, success, and beautiful moments. Here's to new adventures and dreams coming true! Happy New Year! ✨`)
+            // Fallback wish if error
+            const fallbackWish = `Dear ${name}, may 2026 bring you endless joy, success, and beautiful moments. Here's to new adventures and dreams coming true! Happy New Year! ✨`
+            setWish(fallbackWish)
             setShowResult(true)
         } finally {
             setIsGenerating(false)
+            setIsSaving(false)
         }
     }, [name, images])
 
@@ -59,17 +76,26 @@ function SimpleWish() {
         setName('')
         setImages([])
         setWish('')
+        setWishId(null)
         setShowResult(false)
         setCurrentSlide(0)
     }, [])
 
     const handleShare = useCallback(() => {
-        // Create shareable URL with name and wish
-        const shareUrl = `${window.location.origin}/wish?name=${encodeURIComponent(name)}&msg=${encodeURIComponent(wish)}`
+        let shareUrl = window.location.origin
+
+        if (wishId) {
+            // Share the persistent database link
+            shareUrl += `/wish/${wishId}`
+        } else {
+            // Fallback to text-only share if saving failed or still in progress
+            shareUrl += `/wish?name=${encodeURIComponent(name)}&msg=${encodeURIComponent(wish)}`
+        }
+
         const text = `🎉 Happy New Year 2026! Here's a special wish for you:\n\n${shareUrl}`
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`
         window.open(whatsappUrl, '_blank')
-    }, [name, wish])
+    }, [name, wish, wishId])
 
     // RESULT VIEW
     if (showResult) {
@@ -109,12 +135,18 @@ function SimpleWish() {
                             Happy New Year, <span className="name-highlight">{name}</span>! 🎆
                         </h1>
                         <p className="wish-message">{wish}</p>
+                        {isSaving && <p className="saving-status">💾 Saving your wish...</p>}
                     </div>
 
                     {/* Actions */}
                     <div className="result-actions">
-                        <Button variant="whatsapp" onClick={handleShare} icon="📱">
-                            Share on WhatsApp
+                        <Button
+                            variant="whatsapp"
+                            onClick={handleShare}
+                            icon="📱"
+                            disabled={isSaving}
+                        >
+                            {isSaving ? 'Saving...' : 'Share on WhatsApp'}
                         </Button>
                         <Button variant="outline" onClick={handleReset}>
                             Create New

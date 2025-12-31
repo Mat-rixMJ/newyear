@@ -11,6 +11,9 @@ function App() {
       <Routes>
         <Route path="/" element={<ImageStylerPage />} />
         <Route path="/styler" element={<ImageStylerPage />} />
+        {/* Route for viewing a specific wish by ID */}
+        <Route path="/wish/:id" element={<ViewWish />} />
+        {/* Legacy route for text-only wishes */}
         <Route path="/wish" element={<ViewWish />} />
       </Routes>
     </div>
